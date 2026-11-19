@@ -1,0 +1,73 @@
+---
+title: Customer Web Plugins
+description: Add optional features to Customer Web, check what is installed, and safely remove or restore plugins.
+date: 2026-11-19
+---
+
+# Customer Web Plugins
+
+Plugins add optional features, like new pages or home page sections, to your Customer Web storefront. Run the commands from the Customer Web source folder, where `package.json` is.
+
+## Flash Sales
+
+The `flash-sales` plugin adds home page flash sale layouts, countdowns, and product displays using your storefront catalog.
+
+## Install or update
+
+1. Finish [Customer Web setup](/customer-web/installation) and check that it can reach your Admin Panel. Back up the project and the folder beside it ending in `-plugin-state`, if present.
+2. Extract a package compatible with your Customer Web version into `plugins/`. For example, the manifest should be at `plugins/flash-sales/plugin.json`.
+3. Use the `id` from `plugin.json`. A preview shows the plan without changing files.
+
+```bash
+npm run plugins:install -- flash-sales --dry-run
+```
+
+If the target is right, install it.
+
+```bash
+npm run plugins:install -- flash-sales
+```
+
+To update, keep a copy of the old package, replace its folder with the new one, and repeat these commands. If you mistype the ID, the CLI lists the IDs it found.
+
+## List installed plugins
+
+```bash
+npm run plugins:list
+```
+
+This shows the ID, version, and status of each plugin installed in your Customer Web project.
+
+## Remove one plugin
+
+Copy the ID from the installed list and preview the removal.
+
+```bash
+npm run plugins:uninstall -- flash-sales --dry-run
+```
+
+If the target is right, uninstall it.
+
+```bash
+npm run plugins:uninstall -- flash-sales
+```
+
+> **Keep the ID in the command.** Uninstall without an ID removes all installed plugins. Install without an ID processes every package in `plugins/`.
+
+Uninstall removes the storefront additions and keeps the package folder, settings, and customer data. After an install or removal, [rebuild and deploy](/customer-web/deployment) to update the live site. On static hosting, remove stale plugin pages as part of the deploy.
+
+## Undo or recover
+
+Revert undoes the latest successful plugin operation once, even if it changed several plugins. Preview it first.
+
+```bash
+npm run plugins:revert -- --dry-run
+```
+
+If that's the change you want to undo, run revert.
+
+```bash
+npm run plugins:revert
+```
+
+Revert restores plugin files and state in your Customer Web project. Redeploy to publish the restored version. If the CLI reports **pending recovery**, fix the reported issue and run `npm run plugins:revert` before retrying. Keep the installer state folder.

@@ -92,6 +92,10 @@ export const sidebarNav = [
         href: '/customer-web/installation',
       },
       {
+        title: 'Plugins',
+        href: '/customer-web/plugins',
+      },
+      {
         title: 'Deployment',
         href: '/customer-web/deployment',
       },

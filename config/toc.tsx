@@ -338,6 +338,28 @@ export const TocData: TocData = {
       href: '/customer-web/installation#8-troubleshooting',
     },
   ],
+  'customer-web/plugins': [
+    {
+      title: 'Flash Sales',
+      href: '/customer-web/plugins#flash-sales',
+    },
+    {
+      title: 'Install or update',
+      href: '/customer-web/plugins#install-or-update',
+    },
+    {
+      title: 'List installed plugins',
+      href: '/customer-web/plugins#list-installed-plugins',
+    },
+    {
+      title: 'Remove one plugin',
+      href: '/customer-web/plugins#remove-one-plugin',
+    },
+    {
+      title: 'Undo or recover',
+      href: '/customer-web/plugins#undo-or-recover',
+    },
+  ],
   'customer-web/deployment': [
     {
       title: 'Overview',
