@@ -1,23 +1,18 @@
 ---
 title: Customer Web — Prerequisites
-description: Steps to prepare the Admin Panel, connect Firebase, and add Google Maps API key before using the Customer Web site.
+description: Prepare the Admin Panel, Firebase, and map settings that Customer Web uses.
 date: 2025-11-03
 ---
 
-# Prerequisites — Customer Web (Admin, Firebase & Maps)
+# Customer Web Prerequisites
 
-Before running or deploying the Customer Web, make sure the **Admin Panel**, **Firebase**, and **Google Maps API** are correctly set up.  
-All required configuration — such as Firebase credentials and Google API key — must be entered **inside the Admin Panel**.
+Customer Web needs a reachable Admin Panel. Set up Firebase if you use it for web sign-in or notifications, and choose a map provider for the storefront.
 
 ---
 
 ## 1) Admin Panel Setup
 
-- Make sure the Admin Panel is fully set up and accessible from a subdomain, for example:
-
-- Obtain the **Admin URL** and **login credentials** from your technical team.
-- You will manage all configuration (Firebase, Google Maps, etc.) from the Admin Panel directly.
-- The Customer Web connects automatically to the Admin Panel API — no need to edit any local environment variables.
+Make sure you can open your hosted Admin Panel and sign in. Have its address ready, for example `https://admin.example.com`. You will enter it in the web project's `.env.local` during [installation](/customer-web/installation).
 
 ---
 
@@ -43,6 +38,8 @@ Before using push notifications or authentication features, you need a Firebase 
 5. Open your **Admin Panel** and go to **Settings → Authentication -> firebase**.
    ![Firebase Console — add a Web app](/images/firebase-6.png)
 6. Paste your Firebase details there and save.
+
+For Firebase web sign-in, add your public storefront domain in **Authentication → Settings → Authorized domains** in the Firebase console. [Firebase authentication help](https://firebase.google.com/docs/auth/faq-and-troubleshooting)
 
 ### Configuring Push Notifications
 
@@ -73,16 +70,18 @@ Before using push notifications or authentication features, you need a Firebase 
 
 These credentials will enable push notifications for your web application.
 
-> 🔹 The Admin Panel securely stores these values and automatically applies them to the Customer Web.  
-> No manual `.env` file editing is required.
+Keep the service account file in the Admin Panel's notification settings. The web project reads its Firebase configuration from the Admin Panel.
 
 ---
 
-## 3) Final Checklist
+## 3) Map setup
 
-✅ Admin Panel is hosted and reachable on a subdomain.  
-✅ Firebase configuration is added in the Admin Panel.  
-✅ Google Maps API key is added in the Admin Panel.  
-✅ Push Notification keys are added in the Admin Panel.
+In the Admin Panel, open **Settings → Map Settings** and choose **Google Maps** or **OpenStreetMap**. If you use Google Maps or Google Places, enter the Google Maps key there. Save and check that the storefront can select a delivery address.
 
-Once these are completed, you can [Install](/customer-web/installation) and start the Customer Web.
+## 4) Final checklist
+
+- Your Admin Panel is hosted and reachable.
+- The storefront's map provider is configured.
+- Firebase sign-in and notification settings are ready if you use them.
+
+Continue to [Install Customer Web](/customer-web/installation).
