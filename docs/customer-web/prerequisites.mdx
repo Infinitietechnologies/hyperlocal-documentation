@@ -1,0 +1,88 @@
+---
+title: Customer Web — Prerequisites
+description: Steps to prepare the Admin Panel, connect Firebase, and add Google Maps API key before using the Customer Web site.
+date: 2025-11-03
+---
+
+# Prerequisites — Customer Web (Admin, Firebase & Maps)
+
+Before running or deploying the Customer Web, make sure the **Admin Panel**, **Firebase**, and **Google Maps API** are correctly set up.  
+All required configuration — such as Firebase credentials and Google API key — must be entered **inside the Admin Panel**.
+
+---
+
+## 1) Admin Panel Setup
+
+- Make sure the Admin Panel is fully set up and accessible from a subdomain, for example:
+
+- Obtain the **Admin URL** and **login credentials** from your technical team.
+- You will manage all configuration (Firebase, Google Maps, etc.) from the Admin Panel directly.
+- The Customer Web connects automatically to the Admin Panel API — no need to edit any local environment variables.
+
+---
+
+## 2) Firebase Configuration (through Admin Panel)
+
+Before using push notifications or authentication features, you need a Firebase project.
+
+1. Go to [Firebase Console](https://console.firebase.google.com/).
+
+   ![Firebase Console — add a Web app](/images/firebase-1.png)
+
+2. Create a new project (or use an existing one).
+
+3. Add a **Web App** (the `</>` option) to your Firebase project.
+   ![Firebase Console — add a Web app](/images/firebase-2.png)
+   ![Firebase Console — add a Web app](/images/firebase-3.png)
+
+4. Click on Project settings and Copy the Firebase configuration values shown on screen — including `apiKey`, `authDomain`, `projectId`, `messagingSenderId`, and `appId`.
+
+   ![Firebase Console — add a Web app](/images/firebase-4.png)
+   ![Firebase Console — add a Web app](/images/firebase-5.png)
+
+5. Open your **Admin Panel** and go to **Settings → Authentication -> firebase**.
+   ![Firebase Console — add a Web app](/images/firebase-6.png)
+6. Paste your Firebase details there and save.
+
+### Configuring Push Notifications
+
+7. In Firebase Console, go to **Project Settings → Cloud Messaging**.
+
+8. Under the **Web Push certificates** section, click on **Generate key pair**.
+   ![Firebase Console — add a Web app](/images/firebase-7.png)
+
+   - Copy the generated Web Push certificate key (VAPID key).
+
+9. Download the service account JSON file:
+
+   - Go to **Project Settings → Service Accounts**.
+
+     ![Firebase Console — add a Web app](/images/firebase-8.png)
+
+   - Click on **Generate New Private Key**.
+   - Save the downloaded JSON file securely.
+
+10. Configure Push Notifications in Admin Panel:
+
+    - Navigate to **Settings → Notifications**.
+      ![Firebase Console — add a Web app](/images/firebase-9.png)
+
+    - Enter the Web Push certificate key (VAPID key).
+    - Upload the service account JSON file you downloaded.
+    - Save the settings.
+
+These credentials will enable push notifications for your web application.
+
+> 🔹 The Admin Panel securely stores these values and automatically applies them to the Customer Web.  
+> No manual `.env` file editing is required.
+
+---
+
+## 3) Final Checklist
+
+✅ Admin Panel is hosted and reachable on a subdomain.  
+✅ Firebase configuration is added in the Admin Panel.  
+✅ Google Maps API key is added in the Admin Panel.  
+✅ Push Notification keys are added in the Admin Panel.
+
+Once these are completed, you can [Install](/customer-web/installation) and start the Customer Web.

@@ -1,0 +1,67 @@
+---
+title: App Name
+description: Change the app display name across Android and iOS platforms.
+---
+
+# App Name
+
+Quickly update the app display name in the shared constants, Android manifest, and iOS Info.plist.
+
+---
+
+## Shared Configuration
+
+**File:** `lib/config/constant.dart`
+
+```dart
+// lib/config/constant.dart
+  const String appName = 'Your App Name';
+```
+
+![App name locations](/images/custom-changes/app-name-constant-rider.png)
+
+---
+
+## Android Configuration
+
+**File:** `android/app/src/main/AndroidManifest.xml`
+
+```xml
+<!-- android/app/src/main/AndroidManifest.xml -->
+<application
+    android:label="Your App Name"
+    android:name="${applicationName}"
+    android:icon="@mipmap/ic_launcher"
+    android:enableOnBackInvokedCallback="true">
+    <!-- other configuration -->
+</application>
+```
+
+![App name locations](/images/custom-changes/app-name-android-rider.png)
+
+---
+
+## iOS Configuration
+
+**File:** `ios/Runner/Info.plist`
+
+```xml
+<!-- ios/Runner/Info.plist -->
+<key>CFBundleDisplayName</key>
+<string>Your App Name</string>
+<key>CFBundleName</key>
+<string>Your App Name</string>
+```
+
+![App name locations](/images/custom-changes/app-name-ios-rider.png)
+
+## Verification
+
+After updating the app name:
+
+1. Rebuild the app: `flutter clean && flutter pub get`
+2. Run on device: `flutter run`
+3. Check that the app name appears correctly:
+   - In the app launcher/home screen
+   - In device settings > Apps
+   - In the app's about/settings screen (if applicable)

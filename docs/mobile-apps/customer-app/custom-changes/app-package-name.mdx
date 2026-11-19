@@ -1,0 +1,43 @@
+---
+title: App Package / Bundle Name
+description: Update the Android package via kotlin folder rename and the iOS bundle identifier.
+---
+
+# App Package / Bundle Name
+
+Follow these steps to rename the app identifiers for both Android and iOS.
+
+---
+
+## Quick rename (Android & iOS) via package
+
+You can rename both Android and iOS identifiers in one step using the `flutter_app_change_package_name` package:
+
+```bash
+# From project root
+# For both android and ios
+flutter pub run change_app_package_name:main com.yourcompany.customer
+
+
+# For android specific
+flutter pub run change_app_package_name:main com.yourcompany.customer --android
+
+
+# For ios specific
+flutter pub run change_app_package_name:main com.yourcompany.customer --ios
+```
+
+After running, verify:
+- Android package path and ids are updated.
+- iOS bundle identifier is updated.
+- Rebuild both apps.
+
+---
+
+## Checklist
+
+- Android `applicationId` and `namespace` updated to the new package.
+- iOS Bundle Identifier updated in Xcode.
+- Firebase app records (Android/iOS) match the new identifiers.
+- Rebuilt both Android and iOS after the changes.
+

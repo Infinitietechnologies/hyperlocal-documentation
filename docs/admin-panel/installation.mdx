@@ -1,0 +1,266 @@
+---
+title: Admin Panel Installation
+description: Step-by-step instructions to install and configure the Laravel-based Admin Panel locally
+date: 2025-11-04
+---
+
+# Installation — Admin Panel (Laravel)
+
+This guide walks you through the process of setting up the Laravel Admin Panel on your local machine. Follow these steps carefully to ensure a proper installation.
+
+## 1) What you'll need
+
+- A computer with internet access
+- Basic knowledge of command line operations
+- Git installed on your system
+- The project's source code (from CodeCanyon)
+
+## 2) Install PHP and Composer
+
+PHP and Composer are essential for running Laravel applications.
+
+Steps (Windows):
+
+1. **Install PHP:**
+
+   - Download PHP for Windows from https://windows.php.net/download
+   - Choose the latest PHP 8.1.x Thread Safe version
+   - Extract the ZIP to `C:\php`
+   - Add PHP to your system's PATH:
+     - Open System Properties → Advanced → Environment Variables
+     - Under System Variables, find PATH and click Edit
+     - Add `C:\php` as a new entry
+     - Click OK to save
+
+2. **Install Composer:**
+   - Download the Composer installer from https://getcomposer.org/download/
+   - Run the installer and follow the prompts
+   - Make sure to select the PHP you just installed
+   - Verify installation by opening a new PowerShell window and typing:
+
+```cmd
+php -v
+composer -v
+```
+
+## 3) Install MySQL
+
+The Admin Panel uses MySQL for database management.
+
+Steps (Windows):
+
+1. Download MySQL Installer from https://dev.mysql.com/downloads/installer/
+2. Run the installer and choose:
+   - Server only installation
+   - Use Legacy Authentication Method
+3. Set a root password and remember it
+4. Complete the installation
+5. Verify MySQL is running:
+
+```cmd
+mysql --version
+```
+
+## 4) Get the project files
+
+1. Locate the admin panel folder from your CodeCanyon download
+2. Open the folder in VS Code
+3. Your folder structure should look similar to this:
+
+<FolderTree className="overflow-hidden bg-background p-2">
+  <Folder element="Admin Panel Root" defaultOpen={true}>
+    <Folder element="app" />
+    <Folder element="config" />
+    <Folder element="database" />
+    <Folder element="public" />
+    <Folder element="resources" />
+    <Folder element="routes" />
+    <Folder element="storage" />
+    <File>
+      <p>.env.example</p>
+    </File>
+    <File>
+      <p>artisan</p>
+    </File>
+    <File>
+      <p>composer.json</p>
+    </File>
+  </Folder>
+</FolderTree>
+
+## 5) Install dependencies
+
+Open PowerShell in your project folder and run:
+
+```cmd
+composer install
+npm install
+```
+
+## 6) Configure environment
+
+1. Copy `.env.example` to `.env`:
+
+```cmd
+copy .env.example .env
+```
+
+2. Generate application key:
+
+```cmd
+php artisan key:generate
+```
+
+3. Open `.env` and configure your database:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
+
+4. Create the database:
+
+```cmd
+php artisan mysql
+CREATE DATABASE your_database_name;
+exit
+```
+
+5. Run migrations and seed the database:
+
+```cmd
+php artisan migrate --seed
+```
+
+## 7) Start the development server
+
+1. Start the Laravel development server:
+
+```cmd
+php artisan serve
+```
+
+2. In a new terminal, compile assets:
+
+```cmd
+npm run dev
+```
+
+Your admin panel should now be accessible at http://localhost:8000
+
+Default login credentials:
+
+- Email: admin@admin.com
+- Password: password
+
+## 8) Configure Customer Web Connection
+
+Make sure your Customer Web's `.env` file has the correct admin panel URL:
+
+```env
+NEXT_PUBLIC_ADMIN_PANEL_URL=http://localhost:8000
+```
+
+## 9) Troubleshooting
+
+- If PHP is not recognized, verify it's in your PATH
+- For database connection errors, check your MySQL service is running
+- For permission issues in storage or cache:
+  ```cmd
+  php artisan cache:clear
+  php artisan config:clear
+  ```
+- For composer memory issues, try:
+  ```cmd
+  php -d memory_limit=-1 /usr/local/bin/composer install
+  ```
+
+## 10) Web Installation on Server
+
+Follow these steps to install the Admin Panel on your web server:
+
+### Step 1: Welcome & Start Installation
+
+![Welcome screen](/images/install/image-1.png)
+
+Begin the Hyperlocal installation process. This wizard will guide you through configuring your hyperlocal multivendor marketplace step by step.
+
+---
+
+### Step 2: Database Configuration
+
+![Database configuration](/images/install/image-2.png)
+
+Enter your database connection details:
+
+- **Hostname** (usually `localhost`)
+- **Database username**
+- **Database password**
+- **Database name**
+
+Ensure the database already exists before proceeding.
+
+---
+
+### Step 3: Create Super Admin Account
+
+![Admin setup](/images/install/image-3.png)
+
+Set up the primary **Super Admin** account for managing the platform.  
+Provide:
+
+- Admin name
+- Email address
+- Password
+- Mobile number
+
+These credentials will be used to access the admin panel.
+
+---
+
+### Step 4: Server Requirements Check
+
+![Server requirements](/images/install/image-4.png)
+
+The installer automatically verifies required server configurations, including:
+
+- PHP version (>= 8.2)
+- OpenSSL
+- PDO
+- Mbstring
+- Tokenizer
+- Fileinfo
+- cURL
+
+All requirements must be marked as passed to continue.
+
+---
+
+### Step 5: Folder Permission Verification
+
+![Folder permissions](/images/install/image-5.png)
+
+The system checks necessary folder permissions to ensure smooth operation:
+
+- `storage/app`
+- `storage/framework`
+- `storage/logs`
+- `bootstrap/cache`
+
+All directories should have **775** permissions.
+
+---
+
+### Step 6: Installation Completed
+
+![Installation completed](/images/install/image-6.png)
+
+Installation is now complete 🎉  
+Your Super Admin account has been successfully created, and the system is ready to use.
+
+
+Once you have all installation installed and configured, proceed to the [Overview](/admin-panel/overview) guide for step-by-step instructions/overview on the Admin Panel.

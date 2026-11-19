@@ -1,0 +1,80 @@
+---
+title: App Logo
+description: Update app icons for Android and iOS using the flutter_launcher_icons package.
+---
+
+# App Logo
+
+Use this guide to replace the app icon on both **Android** and **iOS** using the [`flutter_launcher_icons`](https://pub.dev/packages/flutter_launcher_icons) package. This is the recommended approach as it automatically generates all required icon sizes for both platforms.
+
+---
+
+## Step 1: Replace the Source Logo
+
+Place your new logo image at the following path in the project:
+
+```
+assets/images/app_launcher_logo/launcher_icon.png
+```
+
+![Assets launcher icon folder](/images/custom-changes/assets-launcher-icon.png)
+
+> **Requirements:**
+> - Format: PNG
+> - Recommended size: **1024×1024 px** (square, no padding)
+> - Name the file exactly: `launcher_icon.png`
+
+---
+
+## Step 2: Configure `flutter_launcher_icons` in `pubspec.yaml`
+
+Make sure the `flutter_launcher_icons` package is added as a dev dependency and configured in your `pubspec.yaml`:
+
+![App launcher icon location](/images/custom-changes/app-launcher-icon.png)
+
+```yaml
+dev_dependencies:
+  flutter_launcher_icons: ^0.14.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app_launcher_logo/launcher_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/app_launcher_logo/launcher_icon.png"
+```
+
+> **Note:** Adjust `adaptive_icon_background` to match your brand color for Android adaptive icons.
+
+---
+
+## Step 3: Run the Icon Generator
+
+Run the following commands in your terminal from the project root:
+
+```bash
+flutter pub get
+dart run flutter_launcher_icons
+```
+
+This will automatically generate and place all required icon sizes in:
+- `android/app/src/main/res/mipmap-*/` — for Android launcher icons
+- `ios/Runner/Assets.xcassets/AppIcon.appiconset/` — for iOS app icons
+
+---
+
+## Verification
+
+After running the generator, rebuild and run the app:
+
+```bash
+flutter clean
+flutter pub get
+flutter run
+```
+
+Check that:
+- ✅ App icon appears correctly in the device app launcher
+- ✅ All icon sizes render properly on Android and iOS
+- ✅ Android adaptive icon displays correctly on supported devices

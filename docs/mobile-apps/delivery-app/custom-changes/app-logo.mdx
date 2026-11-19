@@ -1,0 +1,57 @@
+---
+title: App Logo
+description: Update app icons for Android and iOS platforms.
+---
+
+# App Logo
+
+Use this guide to replace the app icons on both Android and iOS while keeping file names and required sizes intact.
+
+---
+
+## Android Logo
+
+**Folders to update**
+- `assets/png/` — keep the same file names and sizes  
+
+![Android logo assets](/images/custom-changes/app-logo-assets-rider.png)
+
+- `android/app/src/main/res/` — update mipmap and drawable folders  
+
+![Android logo assets](/images/custom-changes/app-logo-res.png)
+
+**Steps**
+1. Prepare your logo in all densities (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi).
+2. Replace files in `lib/assets/app_logos/`, keeping filenames identical.
+3. Replace launcher icons in each `android/app/src/main/res/mipmap-*` folder.
+4. Replace splash assets in `android/app/src/main/res/drawable/` if your splash uses the logo.
+
+---
+
+## iOS Logo
+
+**Folder to update**
+- `ios/Runner/Assets.xcassets/AppIcon.appiconset/`
+
+**Steps**
+1. Open `ios/Runner.xcworkspace` in Xcode.
+2. Select `Assets.xcassets` → `AppIcon`.
+3. Drag and drop your icons into every required slot.
+4. Ensure all required sizes are provided (20pt, 29pt, 40pt, 60pt, 76pt, 83.5pt, 1024pt).
+
+![iOS logo assets](/images/custom-changes/ios-app-logo.png)
+
+## Verification
+
+After updating the logos:
+
+```bash
+flutter clean
+flutter pub get
+flutter run
+```
+
+Check that:
+- App icon appears correctly in the app launcher
+- Splash screen shows your logo
+- All icon sizes render properly on different devices

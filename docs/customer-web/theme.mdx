@@ -1,0 +1,134 @@
+---
+title: Theme
+description: 'Learn how to customize and manage your website theme using Tailwind CSS and HeroUI. Configure light and dark themes, extend font sizes and screen breakpoints, and define global color palettes directly in your tailwind.config.ts file.'
+date: 2025-11-03
+---
+
+# Theming in Your Project
+
+## Overview
+
+Your project uses **Tailwind CSS** combined with **HeroUI’s built-in theming system** to manage consistent styles across the entire website — including typography, layout, and color modes.
+
+You can customize **light and dark themes**, **font sizes**, **screen breakpoints**, and **brand colors** directly inside your configuration file:
+
+<FolderTree className="overflow-hidden bg-background p-2 mb-4">
+  <Folder element="Project Root" defaultOpen={true}>
+    <File>
+      <p>tailwind.config.ts</p>
+    </File>
+  </Folder>
+</FolderTree>
+
+---
+
+## 1. Theme Configuration File
+
+```ts
+import { heroui } from '@heroui/theme';
+
+/** @type {import('tailwindcss').Config} */
+const config = {
+  content: [
+    './src/layouts/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)'],
+        mono: ['var(--font-mono)'],
+      },
+      fontSize: {
+        tiny: '0.4375rem', // 7px
+        xxs: '0.625rem', // 10px
+        xs: '0.75rem', // 12px
+        small: '0.875rem', // 14px
+        medium: '0.9375rem', // 15px
+        large: '1.125rem', // 18px
+      },
+      screens: {
+        xxs: '320px',
+        xs: '375px',
+        sm: '431px',
+        md: '769px',
+        lg: '1440px',
+        xl: '1800px',
+        xxl: '2550px',
+      },
+    },
+  },
+  darkMode: 'class',
+  plugins: [
+    heroui({
+      prefix: 'heroui',
+      addCommonColors: false,
+      defaultTheme: 'light',
+      defaultExtendTheme: 'light',
+      layout: {
+        dividerWeight: '1px',
+        disabledOpacity: 0.45,
+        radius: {
+          small: '6px',
+          medium: '8px',
+          large: '12px',
+        },
+        borderWidth: {
+          small: '1px',
+          medium: '1px',
+          large: '2px',
+        },
+      },
+      themes: {
+        light: {
+          colors: {
+            background: '#ffffff', // white
+            foreground: '#000000', // black
+            focus: '#3b82f6', // bright blue (Tailwind blue-500)
+            primary: {
+              50: '#eff6ff', // lightest blue
+              100: '#dbeafe', // very light blue
+              200: '#bfdbfe', // light sky blue
+              300: '#93c5fd', // soft blue
+              400: '#60a5fa', // medium blue
+              500: '#3b82f6', // main blue
+              600: '#2563eb', // deep blue
+              700: '#1d4ed8', // darker blue
+              800: '#1e40af', // navy blue
+              900: '#1e3a8a', // dark navy
+              DEFAULT: '#3b82f6', // default blue
+            },
+          },
+        },
+        dark: {
+          colors: {
+            background: '#000000', // black
+            foreground: '#ffffff', // white
+            focus: '#60a5fa', // sky blue focus ring
+            primary: {
+              50: '#eff6ff', // lightest blue
+              100: '#dbeafe', // very light blue
+              200: '#bfdbfe', // light sky blue
+              300: '#93c5fd', // soft blue
+              400: '#60a5fa', // medium blue
+              500: '#3b82f6', // main blue
+              600: '#2563eb', // deep blue
+              700: '#1d4ed8', // darker blue
+              800: '#1e40af', // navy blue
+              900: '#1e3a8a', // dark navy
+              DEFAULT: '#3b82f6', // default blue
+            },
+          },
+        },
+      },
+    }),
+  ],
+};
+
+export default config;
+```
+
+- You can download the color scheme from [Here](https://www.heroui.com/themes).

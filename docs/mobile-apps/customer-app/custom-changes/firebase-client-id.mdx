@@ -1,0 +1,83 @@
+---
+title: Firebase Server Client ID
+description: Configure Firebase server client ID for authentication.
+---
+
+# Firebase Server Client ID
+
+Add the Firebase server client ID so Google Sign-In works correctly.
+
+---
+
+## Configuration
+
+**File:** `lib/config/constant.dart`
+
+```dart
+// lib/config/constant.dart
+class AppConstant {
+  static String serverClientId = 'YOUR_FIREBASE_SERVER_CLIENT_ID';
+  // Example:
+  // '123456789-abcdefghijklmnop.apps.googleusercontent.com'
+}
+```
+
+---
+
+## Find Your Server Client ID
+
+1. Open `android/app/google-services.json` in your editor.
+2. Look for the `oauth_client` array (usually near the end).
+3. You should see something like this:
+
+```json
+"oauth_client": [
+  {
+    "client_id": "123456789012-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com",
+    "client_type": 3
+  }
+]
+```
+
+4. The `client_id` here (with `apps.googleusercontent.com`) is your `serverClientId`.
+5. Paste it into `lib/config/constant.dart` → `serverClientId` variable.
+
+<img src="/images/app-firebase/firebase_client_id.png" alt="Firebase client ID from GoogleService-Info.plist" width="720" />
+<img src="/images/custom-changes/firebase-client-id.png" alt="Firebase client ID" width="720" style={{ marginTop: '16px' }} />
+
+---
+
+## Usage in Authentication
+
+```dart
+import 'package:google_sign_in/google_sign_in.dart';
+import 'config/constant.dart';
+
+final GoogleSignIn _googleSignIn = GoogleSignIn(
+  serverClientId: AppConstant.serverClientId,
+);
+
+Future<void> signInWithGoogle() async {
+  final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+  // Handle authentication
+}
+```
+
+---
+
+## Important Notes
+
+- The server client ID must match your Firebase project.
+- It differs from the Android/iOS client IDs.
+- Keep it secure; avoid committing secrets to public repos.
+- Consider env vars or secure storage in production.
+
+---
+
+## Verification
+
+1. Test Google Sign-In.
+2. Confirm auth tokens are returned.
+3. Check Firebase Console for auth events.
+4. Confirm the client ID matches your Firebase project.
+

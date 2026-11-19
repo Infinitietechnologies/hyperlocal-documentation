@@ -1,0 +1,222 @@
+---
+title: Customer Web Installation
+description: Step-by-step, non-technical instructions to install Node.js, Visual Studio Code, and run the Customer Web (Next.js) site locally.
+date: 2025-11-01
+---
+
+# Installation — Customer Web (Next.js)
+
+This guide walks you through installing the tools you need and starting the Customer Web site on your computer. It's written for non-technical users and includes clear, step-by-step instructions for Windows.
+
+## 1) What you'll need
+
+- A computer with internet access
+- Basic ability to download and run installers (double-click)
+- This project's source code (you can download or clone it from the repository)
+
+## 2) Install Node.js (the runtime)
+
+Node.js is the software that runs JavaScript on your computer. The Customer Web uses Node.js.
+
+Steps (Windows):
+
+1. Open your web browser and go to https://nodejs.org/en/download.
+2. Click the button for the LTS version (recommended for most users).
+3. Save the installer and double-click it to run.
+4. Use the default options in the installer (Next → Next). Make sure the option to add Node to PATH is selected (it's usually checked by default).
+
+5. After installation finishes, open PowerShell or Command Prompt (press Windows key, type "PowerShell" or "cmd" and open it).
+6. Verify the installation by typing:
+
+```cmd
+node -v
+npm -v
+```
+
+You should see versions printed, e.g. `v23.x.x` and a number for npm. If you see those, Node.js is installed.
+
+If you prefer not to install Node globally, there are advanced options (like using nvm) — but for simplicity, follow the installer.
+
+## 3) Install Visual Studio Code (VS Code)
+
+VS Code is a code editor that makes it easy to open the project, read files, and run commands.
+
+Steps (Windows):
+
+1. Go to https://code.visualstudio.com/download and click "Download for Windows".
+2. Run the downloaded installer and accept default options. Optionally enable "Add to PATH" and "Open with Code" during install.
+3. After install, open VS Code.
+
+Recommended extensions (optional):
+
+- Prettier — code formatting
+- ESLint — shows JavaScript/TypeScript problems
+- Tailwind CSS IntelliSense — if editing styles
+
+These help with editing but are not required to run the site.
+
+## 4) Get the project files
+
+If you already have the downloaded source files from **CodeCanyon**, open the **web** folder (or main project folder) in VS Code.  
+This folder contains all your front-end code.
+
+Your folder structure should look like this:
+
+<FolderTree className="overflow-hidden bg-background p-2">
+  <Folder element="Project Root Folder" defaultOpen={true}>
+    <Folder element=".vscode" />
+    <Folder element="node_modules" />
+    <Folder element="public" />
+    <Folder element="scripts" />
+    <Folder element="src" />
+    <File>
+      <p>.env</p>
+    </File>
+    <File>
+      <p>.gitignore</p>
+    </File>
+    <File>
+      <p>.npmrc</p>
+    </File>
+    <File>
+      <p>create-htaccess.js</p>
+    </File>
+    <File>
+      <p>eslint.config.mjs</p>
+    </File>
+    <File>
+      <p>ftp.js</p>
+    </File>
+    <File>
+      <p>i18n.ts</p>
+    </File>
+    <File>
+      <p>LICENSE</p>
+    </File>
+    <File>
+      <p>next-env.d.ts</p>
+    </File>
+    <File>
+      <p>next.config.ts</p>
+    </File>
+    <File>
+      <p>package-lock.json</p>
+    </File>
+    <File>
+      <p>package.json</p>
+    </File>
+    <File>
+      <p>postcss.config.mjs</p>
+    </File>
+    <File>
+      <p>README.md</p>
+    </File>
+    <File>
+      <p>tailwind.config.ts</p>
+    </File>
+    <File>
+      <p>tsconfig.json</p>
+    </File>
+  </Folder>
+</FolderTree>
+
+If you haven’t downloaded the files yet, get them from **CodeCanyon**, unzip the package, and locate the folder named `web` (or `HYPER-LOCAL-22`) to begin working.
+
+## 5) Install dependencies
+
+Open PowerShell or Command Prompt in the project's folder (or use the VS Code terminal). Then run:
+
+```cmd
+npm install
+```
+
+- Then you can see `node_modules` are created automatically.
+  But if you see an error like this in the terminal, it means PowerShell's `ExecutionPolicy` is too restrictive:
+
+```cmd
+PS C:\Users\infin\Desktop\Customer Web> npm install
+npm : File C:\Program Files\nodejs\npm.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at
+https:/go.microsoft.com/fwlink/?LinkID=135170.
+At line:1 char:1
++ npm i
++ ~~~
+  + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+  + FullyQualifiedErrorId : UnauthorizedAccess
+```
+
+**How to fix this error:**
+
+1. Close your current PowerShell window.
+2. Click the Start menu, type `PowerShell`, then **right-click** on Windows PowerShell and select **Run as administrator**.
+3. In the Administrator PowerShell window, enter this command and press Enter:
+
+```powershell
+Set-ExecutionPolicy RemoteSigned
+```
+
+4. When prompted, type `Y` and press Enter to confirm.
+5. Close the Administrator PowerShell window.
+6. Open a new PowerShell or Command Prompt window (normal, not as admin), go back to your project folder, and run:
+
+```cmd
+npm install
+```
+
+This should now work without the error.
+
+## 6) Open .env file
+
+To help you navigate the project better, here's a visual representation:
+
+<FolderTree className="overflow-hidden bg-background p-2">
+  <Folder element="Project Root" defaultOpen={true}>
+    <File>
+      <p>.env</p>
+    </File>
+  </Folder>
+</FolderTree>
+
+It's should look like this:
+
+```env
+
+# Enable Server Side Rendering
+NEXT_PUBLIC_SSR=true
+
+
+# Admin Panel URL
+NEXT_PUBLIC_ADMIN_PANEL_URL= https://xxxxxxxxxxxxx
+
+```
+
+In the `.env` file, you will see a line like:
+
+```env
+NEXT_PUBLIC_ADMIN_PANEL_URL= https://xxxxxxxxxxxxx
+```
+
+Replace `https://xxxxxxxxxxxxx` with the actual URL of your admin panel. For example:
+
+```env
+NEXT_PUBLIC_ADMIN_PANEL_URL= https://your-admin-panel-url.com
+```
+
+This ensures the Customer Web knows where to connect for admin features.
+
+## 7) Start the development server
+
+Once dependencies are installed, start the site locally:
+
+```cmd
+npm run dev
+```
+
+Open your browser to http://localhost:3000 to view the site.
+
+- Verify your site before goes to the deployment steps.
+
+## 8) Troubleshooting
+
+- If `node -v` shows an error, make sure Node.js installer completed and that PATH was updated. Restart PowerShell after installing.
+
+- If the dev server fails to start, copy the first error message and search the web or ask a teammate — common issues are missing dependencies or ports already in use.

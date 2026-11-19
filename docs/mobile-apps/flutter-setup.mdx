@@ -1,0 +1,88 @@
+---
+title: Flutter & Java JDK Setup
+description: Install Flutter, configure Java JDK, set up your IDE, and initialize a project.
+date: 2025-11-04
+---
+
+# Flutter & Java JDK Setup
+
+Setting up your development environment correctly ensures a smooth experience while building Flutter applications. Follow these steps to install Flutter, configure Java JDK, set up your IDE, and initialize your project.
+
+**Recommended versions**
+- Flutter: `3.35.4`
+- Java JDK: `21.0.5`
+
+---
+
+## 1️⃣ Install Flutter 🛠️
+
+- Download the Flutter SDK from the official site: [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- Extract the ZIP file to a suitable location (e.g., `C:\flutter` on Windows or `~/flutter` on macOS/Linux).
+- Add Flutter to your system path:
+  - **Windows:** Add `C:\flutter\bin` to System Environment Variables.
+  - **macOS/Linux:** Add `export PATH="$HOME/flutter/bin:$PATH"` to `~/.zshrc` or `~/.bashrc`.
+- Verify installation:
+  ```bash
+  flutter doctor --verbose
+  ```
+- ✅ Ensure all dependencies are installed before proceeding.
+
+---
+
+## 2️⃣ Install Java JDK ☕
+
+- Download the latest JDK from Oracle ([Oracle JDK](https://www.oracle.com/java/technologies/downloads/)) or OpenJDK ([OpenJDK](https://jdk.java.net/)).
+- Install the JDK and note the installation path.
+- Set environment variables:
+  - **Windows:**
+    - Add `JAVA_HOME` as the JDK install path (e.g., `C:\Program Files\Java\jdk-21`).
+    - Add `%JAVA_HOME%\bin` to `Path`.
+  - **macOS/Linux:**
+    ```bash
+    export JAVA_HOME=$(/usr/libexec/java_home)
+    export PATH=$JAVA_HOME/bin:$PATH
+    ```
+- Verify:
+  ```bash
+  java -version
+  ```
+- ✅ Ensure Java is installed correctly before proceeding.
+
+---
+
+## 3️⃣ Install IDE 🖥️
+
+Choose an IDE and install Flutter/Dart plugins:
+- **Android Studio** (full Android toolchain)
+  - Download: [Android Studio](https://developer.android.com/studio)
+  - Install Flutter & Dart plugins (Preferences → Plugins).
+- **Visual Studio Code** (lightweight)
+  - Download: [VS Code](https://code.visualstudio.com)
+  - Install Flutter and Dart extensions from the Marketplace.
+
+✅ Pick the IDE that fits your workflow and install the plugins.
+
+---
+
+## 4️⃣ Basic Flutter Project Setup 📂
+
+- Create and run a project on emulator or device:
+  ```bash
+  flutter create my_app
+  cd my_app
+  flutter run
+  ```
+- Configure platforms:
+  - **Android:** Install Android Studio & required SDKs.
+  - **iOS (macOS only):** Install Xcode & set up the iOS simulator.
+
+---
+
+## ✅ Final Check
+
+Run:
+```bash
+flutter doctor
+```
+
+Resolve any missing dependencies. Test a simple Flutter app to confirm everything works as expected.

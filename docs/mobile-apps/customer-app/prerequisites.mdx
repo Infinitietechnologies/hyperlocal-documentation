@@ -1,0 +1,244 @@
+---
+title: Customer App — Prerequisites (Flutter Android & iOS)
+description: Steps to prepare the Admin Panel, connect Firebase for Flutter Android/iOS, and add Google Maps API keys before using the Customer App.
+date: 2025-11-03
+---
+
+# Prerequisites — Customer App (Admin, Firebase & Maps)
+
+Before running or deploying the Flutter Customer App (Android/iOS), make sure the **Admin Panel**, **Firebase**, and **Google Maps API keys** are correctly set up.  
+All required configuration — such as Firebase credentials and Google API keys — must be entered **inside the Admin Panel**.
+
+---
+
+## 1) Admin Panel Setup
+
+- Make sure the Admin Panel is fully set up and accessible from a subdomain, for example:
+
+- Obtain the **Admin URL** and **login credentials** from your technical team.
+- You will manage all configuration (Firebase, Google Maps, etc.) from the Admin Panel directly.
+- The Customer Web connects automatically to the Admin Panel API — no need to edit any local environment variables.
+
+---
+
+## 2) Firebase Configuration (Flutter Android & iOS)
+
+To use authentication or push notifications, you must set up Firebase for both Android and iOS. There are two ways to do this:
+
+### Method 1: Using FlutterFire CLI (Recommended)
+
+Using the **FlutterFire CLI** is the fastest and most reliable way to configure Firebase. It handles the heavy lifting of generating the correct configuration files for all your target platforms automatically.
+
+#### Step 1: Install Firebase CLI
+The Firebase CLI provides a variety of tools for managing, viewing, and deploying to Firebase projects.
+```bash
+# Install globally using npm
+npm install -g firebase-tools
+```
+
+#### Step 2: Log in to Firebase
+This command opens a browser window where you can log in to your Google account associated with your Firebase projects.
+```bash
+firebase login
+```
+> [!NOTE]
+> If you are on a remote machine or a server without a browser, use `firebase login --no-localhost`.
+
+#### Step 3: Install FlutterFire CLI
+The FlutterFire CLI is a useful tool that provides commands to help ease the installation process of FlutterFire.
+```bash
+# Activate the CLI globally
+flutter pub global activate flutterfire_cli
+```
+> [!TIP]
+> Ensure your system's PATH includes the Flutter bin directory so you can run `flutterfire` from anywhere. For MacOS/Linux, this is usually `~/.pub-cache/bin`.
+
+#### Step 4: Configure the Project
+This is the most critical step. Run this command from the **root of your Flutter project**. It is an interactive command that will guide you through the process.
+
+```bash
+flutterfire configure
+```
+
+**Interactive Prompts during configuration:**
+
+1.  **Project Selection:** Select your Firebase project from the list.
+2.  **Platform Selection:** Toggle **android** and **ios** using the Spacebar.
+3.  **Question:** `✔ You have an existing firebase.json file and possibly already configured your project for Firebase. Would you prefer to reuse the values in your existing firebase.json file to configure your project?`
+    - **Answer:** **no** (Type 'no' and Press Enter)
+4.  **Question: File lib/firebase_options.dart already exists. Do you want to overwrite it?**
+    - **Answer:** **Yes** (Press Enter)
+    - *Rationale:* This ensures the file is updated with your specific project credentials.
+
+**Example Success Output:**
+```bash
+✔ Firebase configuration file lib/firebase_options.dart generated successfully with the following Firebase apps:
+
+Platform  Firebase App Id
+android   1:123456789012:android:xxxxxxxxxxxxxxxx
+ios       1:123456789012:ios:xxxxxxxxxxxxxxxx
+```
+
+---
+
+### Method 2: Manual Configuration (Alternative)
+
+If you prefer to configure each platform manually (or to ensure all native files are placed correctly), follow the steps below:
+
+#### Step 1: Create Firebase Project
+1. Go to [Firebase Console](https://console.firebase.google.com/) and create/select your project.  
+   <img src="/images/firebase-1.png" alt="Firebase Console — create a project" width="720" style={{ marginTop: '16px' }} />
+   <img src="/images/app-firebase/create-project-firebase.png" alt="Firebase Console — create project" width="720" style={{ marginTop: '16px' }} />
+
+#### Step 2: Add Android App
+1. Click **Add app** → **Android**.  
+<img src="/images/app-firebase/android-app-firebase.png" alt="Firebase Console — add a android app" width="720" />
+
+2. Enter the Android package name (from `android/app/src/main/AndroidManifest.xml`).  
+<img src="/images/app-firebase/android-app-1.png" alt="Firebase Console — add a Web app" width="720" />
+
+3. Download `google-services.json` and place it in `android/app/`.  
+<img src="/images/app-firebase/android-app-2.png" alt="Firebase Console — add a Web app" width="720" style={{ marginTop: '16px' }} />
+<img src="/images/app-firebase/android-service-file.png" alt="Firebase Console — add a Web app" width="560" height="440" style={{ marginTop: '16px' }} />
+
+#### Step 3: App Release Keystore setup
+
+```bash
+# Check if a keystore already exists (common paths)
+ls android/app/*.jks android/*.jks 2>/dev/null
+
+# Generate a new release keystore (example)
+keytool -genkeypair \
+  -v -keystore android/app/release-key.jks \
+  -storepass yourStorePass \
+  -alias yourKeyAlias \
+  -keypass yourKeyPass \
+  -keyalg RSA -keysize 2048 -validity 10000 \
+  -dname "CN=Your Name, OU=Org, O=Company, L=City, S=State, C=US"
+```
+
+**Sample interactive run (keytool prompts)**
+
+```bash
+cd android
+keytool -genkey -v -keystore app/hyperlocal.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+
+Enter keystore password:
+Re-enter new password:
+
+What is your first and last name?
+  [Unknown]: 
+What is the name of your organizational unit?
+   [Unknown]:  
+What is the name of your organization?
+   [Unknown]:  
+What is the name of your City or Locality?
+   [Unknown]:  
+What is the name of your State or Province?
+   [Unknown]:  
+What is the two-letter country code for this unit?
+   [Unknown]:  
+Is OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown correct?
+   [no]:  yes
+
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 10,000 days
+[Storing android/app/hyperlocal.jks]
+```
+
+**What to use in Firebase**
+
+After generating or locating the keystore, run `./gradlew signingReport` again to obtain the release SHA1/SHA-256 from the keystore you will use for signing.
+
+**Add the SHA-1/SHA-256 for Google Sign-In/phone auth (from gradlew signingReport).**
+
+```bash
+# From project root (Android SDK + Java on PATH)
+cd android
+./gradlew signingReport
+```
+This prints each variant’s SHA-1 and SHA-256. Copy the release (and debug if needed) SHA keys into Firebase Console → Project settings → General → your Android app → Add fingerprint.
+
+**Sample output (truncated)**
+
+```text
+Variant: release
+Config: release
+Store: /Users/.../android/app/hyperlocal.jks
+Alias: upload
+MD5:  **(redacted)**
+SHA1: **(release SHA1 redacted)**
+SHA-256: **(release SHA-256 redacted)**
+Valid until: Sunday, 27 April, 2053
+
+Variant: debug
+Config: debug
+Store: /Users/.../.android/debug.keystore
+Alias: AndroidDebugKey
+MD5:  **(redacted)**
+SHA1: **(debug SHA1 redacted)**
+SHA-256: **(debug SHA-256 redacted)**
+Valid until: Wednesday, 18 August, 2055
+```
+
+Use the SHA1 and SHA-256 fingerprints for the matching app in Firebase:
+
+*   Release build → add the release SHA1 (and SHA-256 if required).
+*   Debug build → add the debug SHA1 if you sign in on debug builds.
+
+<img src="/images/app-firebase/add-sha-keys-firebase.png" alt="Firebase Console — add SHA keys in firebase" width="720" />
+
+#### Step 4: Add iOS App
+1. Click **Add app** → **iOS**.  
+<img src="/images/app-firebase/ios-app-firebase.png" alt="Firebase Console — add a IOS app" width="720" />
+
+2. Enter the iOS bundle ID (from `ios/Runner.xcodeproj` > General).  
+<img src="/images/app-firebase/ios-app-1.png" alt="Firebase Console — register app" width="720" />
+
+3. Download `GoogleService-Info.plist` and add it to `ios/Runner/` in Xcode.  
+<img src="/images/app-firebase/ios-app-2.png" alt="Firebase Console — download GoogleServices.info.plist" width="720" style={{ marginTop: '16px' }} />
+
+**iOS Auth config:**
+1. Open `ios/Runner/GoogleService-Info.plist` and copy `REVERSED_CLIENT_ID`.  
+2. In Xcode, update `ios/Runner/Info.plist` → **CFBundleURLSchemes** to match your `REVERSED_CLIENT_ID`.
+
+<img src="/images/app-firebase/ios-auth-config.png" alt="iOS auth URL scheme configuration" width="720" />
+
+---
+
+
+### Common Steps (Required for both methods)
+
+After completing either method above, you must initialize Firebase in your code and enable authentication providers.
+
+#### 1. Initialize Firebase in Code
+Update `lib/main.dart`:
+```dart
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
+```
+
+#### 2. Enable Authentication Providers
+In **Firebase Console → Authentication → Sign-in method**, enable: **Phone**, **Google**, **Email/Password**, and **Apple**.
+
+<img src="/images/app-firebase/firebase-auth-1.png" alt="Firebase Console — Authentication providers" width="720" style={{ marginTop: '16px' }} />
+<img src="/images/app-firebase/firebase-auth-provider-2.png" alt="Firebase Console — Authentication providers" width="720" style={{ marginTop: '16px' }} />
+
+---
+
+## 3) Final Checklist
+
+✅ Admin Panel is hosted and reachable on a subdomain.  
+✅ Firebase is configured (either manually or via CLI) and files are placed correctly.  
+✅ FCM Server key / service account JSON is added in Admin Panel Notifications.  
+✅ Google Maps API keys are added in Admin Panel.  
+
+Once these are completed, you can run the Flutter Customer App for Android and iOS.
+...

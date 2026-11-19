@@ -1,0 +1,96 @@
+---
+title: Android Maps API Key
+description: Configure Google Maps API key for Android platform.
+---
+
+# Android Maps API Key
+
+Configure the Google Maps API key in both the Dart constants and the Android manifest.
+
+---
+
+## Step 1: Update Constant File
+
+**File:** `lib/config/constant.dart`
+
+```dart
+// lib/config/constant.dart
+class AppConstant {
+  static String androidMapKey = 'YOUR_ANDROID_MAPS_KEY';
+  static String iosMapKey = 'YOUR_IOS_MAPS_KEY';
+}
+```
+
+![Android maps key](/images/custom-changes/map-key-constant.png)
+
+---
+
+## Step 2: Update AndroidManifest
+
+**File:** `android/app/src/main/AndroidManifest.xml` (inside `<application>`)
+
+```xml
+<!-- android/app/src/main/AndroidManifest.xml -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:name="io.flutter.app.FlutterApplication"
+        android:label="Your App Name">
+        
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR_ANDROID_MAPS_KEY" />
+            
+        <!-- other configuration -->
+    </application>
+</manifest>
+```
+
+![Android maps key](/images/custom-changes/map-key-android.png)
+
+---
+
+## Get Your Android Maps API Key
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/).
+2. Select your project (or create one).
+3. Enable **Maps SDK for Android**.
+4. Go to **APIs & Services** → **Credentials**.
+5. Click **Create Credentials** → **API Key**.
+6. Restrict the key to **Maps SDK for Android** (recommended).
+7. Copy the API key.
+
+---
+
+## Usage in Code
+
+```dart
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'config/constant.dart';
+
+GoogleMapController? mapController;
+
+void onMapCreated(GoogleMapController controller) {
+  mapController = controller;
+  // Maps automatically use the key from AndroidManifest
+}
+```
+
+---
+
+## Important Notes
+
+- The key in `AndroidManifest.xml` is read automatically by the Maps Flutter plugin.
+- Restrict your API key in Google Cloud Console for security.
+- Never commit API keys to public repositories.
+
+---
+
+## Verification
+
+1. Run the app on an Android device/emulator.
+2. Open a screen that uses Google Maps.
+3. Verify the map loads.
+4. Check location services if used.
+5. Review Google Cloud Console for API usage statistics.
+

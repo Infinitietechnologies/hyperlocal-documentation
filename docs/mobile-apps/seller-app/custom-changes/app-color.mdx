@@ -1,0 +1,40 @@
+---
+title: App Color
+description: Update the primary color of the Flutter seller app.
+---
+
+# App Color
+
+Use this guide to change the primary branding color used throughout the Flutter seller app.
+
+---
+
+## Changing Primary Color
+
+The primary color is defined in the `AppTheme` class within the configuration files.
+
+**File to update**
+- `lib/config/theme.dart`
+
+![App color change](/images/custom-changes/seller-app-color-change.png)
+
+**Steps**
+1. Open `lib/config/theme.dart` in your code editor.
+2. Locate the `primaryColor` constant inside the `AppTheme` class.
+3. Replace the hex code (e.g., `0xFF006BD5`) with your desired branding color.
+   - Example: `static const Color primaryColor = Color(0xFFYOUR_HEX_CODE);`
+4. Save the file.
+
+## Verification
+
+After updating the color:
+
+```bash
+flutter clean
+flutter pub get
+flutter run
+```
+
+Check that:
+- The app's primary elements (buttons, headers, icons) reflect the new color.
+- Both Light and Dark modes use the updated primary color where applicable.

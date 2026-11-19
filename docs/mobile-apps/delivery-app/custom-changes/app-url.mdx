@@ -1,0 +1,50 @@
+---
+title: App Base URL
+description: Configure API base URLs for different environments.
+---
+
+# App Base URL
+
+Configure the API base URL constants in `lib/config/constant.dart` and verify that every API call points to the correct environment.
+
+---
+
+## Configuration
+
+**File:** `lib/config/constant.dart`
+
+```dart
+// lib/config/constant.dart
+
+  static const baseUrl = 'https://api.example.com';
+
+```
+
+![Base URL constant](/images/custom-changes/base-url-rider.png)
+
+---
+
+## Usage in API Calls
+
+**Service example**
+
+```dart
+import 'package:http/http.dart' as http;
+import 'config/constant.dart';
+
+
+  String loginApi = '${AppConstant.baseUrl}login';
+  String registerApi = '${AppConstant.baseUrl}register';
+  String myOrdersApi = '${baseUrl}orders/my';
+  // Other APIs
+
+```
+
+---
+
+## Verification
+
+1. Test API calls in the app (e.g., login/register).
+2. Confirm network requests hit the intended endpoint.
+3. Check logs to confirm the URL being used.
+4. Test all environments (dev, staging, production) if configured.

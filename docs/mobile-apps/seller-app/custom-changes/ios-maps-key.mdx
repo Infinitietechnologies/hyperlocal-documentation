@@ -1,0 +1,72 @@
+---
+title: iOS Maps API Key
+description: Configure Google Maps API key for iOS platform.
+---
+
+# iOS Maps API Key
+
+Configure the Google Maps API key in both the Dart constants and `AppDelegate.swift`.
+
+---
+
+## Step 1: Update AppDelegate.swift
+
+**File:** `ios/Runner/AppDelegate.swift`
+
+```swift
+// ios/Runner/AppDelegate.swift
+import UIKit
+import Flutter
+import GoogleMaps
+
+@UIApplicationMain
+@objc class AppDelegate: FlutterAppDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    // Initialize Google Maps with API key
+    GMSServices.provideAPIKey("YOUR_IOS_MAPS_KEY")
+    
+    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+}
+```
+
+![iOS maps key](/images/custom-changes/map-key-ios.png)
+
+---
+
+## Getting Your iOS Maps API Key
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Select your project (or create a new one)
+3. Enable **Maps SDK for iOS**
+4. Go to **APIs & Services** > **Credentials**
+5. Click **Create Credentials** > **API Key**
+6. Restrict the API key to **Maps SDK for iOS** (recommended)
+7. Copy the API key
+
+---
+
+## Important Notes
+
+- The API key must be initialized in `AppDelegate.swift` before the app fully launches
+- Make sure to restrict your API key in Google Cloud Console for security
+- Use different API keys for development and production
+- Never commit API keys to public repositories
+- The iOS bundle identifier must match the one configured in Google Cloud Console
+
+---
+
+## Verification
+
+After configuring the iOS Maps API key:
+
+1. Run the app on an iOS device or simulator
+2. Navigate to a screen with Google Maps
+3. Verify the map loads correctly
+4. Check that location services work if used
+5. Review Google Cloud Console for API usage statistics
+

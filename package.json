@@ -1,0 +1,82 @@
+{
+  "name": "hyperlocal-documentation",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Dharmik Parmar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sanjayc208/pinexio/issues"
+  },
+  "scripts": {
+    "dev": "contentlayer2 build && next dev",
+    "build": "contentlayer2 build && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "build:content": "contentlayer2 build",
+    "format": "prettier --write .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md, mdx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "keywords": [
+    "hyperlocal",
+    "hyperlocal-documentation",
+    "nextjs",
+    "documentation",
+    "template",
+    "docs",
+    "nextjs-template",
+    "static-site",
+    "mdx",
+    "documentation-template",
+    "nextjs-docs",
+    "nextjs-starter"
+  ],
+  "dependencies": {
+    "@emotion/is-prop-valid": "^1.4.0",
+    "@radix-ui/themes": "^3.2.1",
+    "@types/mdx": "^2.0.13",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "contentlayer2": "0.5.8",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.26",
+    "gray-matter": "^4.0.3",
+    "lucide-react": "^0.562.0",
+    "next": "^16.1.1",
+    "next-contentlayer2": "0.5.8",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-fox-toast": "^1.10.20",
+    "react-syntax-highlighter": "^16.1.0",
+    "rehype-highlight": "^7.0.2",
+    "rehype-slug": "^6.0.0",
+    "remark-code-import": "^1.2.0",
+    "remark-gfm": "^4.0.1",
+    "remark-slug": "^8.0.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animated": "^2.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^25",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "autoprefixer": "^10.4.23",
+    "concurrently": "^9.2.1",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5"
+  }
+} 
