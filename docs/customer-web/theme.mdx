@@ -1,125 +1,158 @@
----
+﻿---
 title: Theme
-description: 'Learn how to customize and manage your website theme using Tailwind CSS and HeroUI. Configure light and dark themes, extend font sizes and screen breakpoints, and define global color palettes directly in your tailwind.config.ts file.'
-date: 2025-11-03
+description: Change Customer Web colors, logos, fonts, and layout defaults.
+date: 2026-11-19
 ---
 
 # Theming in Your Project
 
-## Overview
+Use **Web Settings** for everyday branding changes. Edit theme files when you want to change the storefront's defaults or layout.
 
-Your project uses **Tailwind CSS** combined with **HeroUI’s built-in theming system** to manage consistent styles across the entire website — including typography, layout, and color modes.
+## Change branding in the Admin Panel
 
-You can customize **light and dark themes**, **font sizes**, **screen breakpoints**, and **brand colors** directly inside your configuration file:
+Go to **Settings → Web Settings**. Change the fields below, save, and refresh the storefront.
 
-<FolderTree className="overflow-hidden bg-background p-2 mb-4">
-  <Folder element="Project Root" defaultOpen={true}>
-    <File>
-      <p>tailwind.config.ts</p>
-    </File>
-  </Folder>
-</FolderTree>
+| What to change | Where to find it | What it affects |
+| --- | --- | --- |
+| Primary Color | Color Scheme | The main color on primary buttons, links, highlights, and focus outlines that use the theme. |
+| Font Color | Color Scheme | Default text that uses the theme. Check that it stays readable in both light and dark modes. |
+| Header, dark header, and footer logos | General | The logo in the light header, dark header, and footer respectively. |
+| Site Favicon | General | The small icon in the browser tab. Your browser may take time to show the new icon. |
 
----
+The saved **Primary Color** and **Font Color** apply to both modes and override the corresponding defaults in the theme files.
 
-## 1. Theme Configuration File
+## Change defaults in your web project
+
+Open these files in the Customer Web source folder.
+
+| File and setting | What changes |
+| --- | --- |
+| `tailwind.config.ts` → `themes.light.colors` and `themes.dark.colors` | `background` is the page surface, `foreground` is default text, and `primary.DEFAULT` is the default accent. Edit each mode separately. If you change the accent, keep `primary.500` and the other shades in the same palette. |
+| `tailwind.config.ts` → `theme.extend.fontSize` and `theme.extend.screens` | Font sizes change text using those size names. Screen widths change when responsive layouts switch, such as when `md:` styles start. |
+| `src/config/fonts.ts` | The bundled default font, currently Lexend Deca. Changing it affects text using the default font. |
+| `src/styles/globals.css` | Site-wide CSS rules, such as scrollbar styles. Use the relevant component's style for a change confined to one section. |
+
+For example, to make the light theme's page background warm white, find `themes.light.colors.background` in `tailwind.config.ts` and change it to `#faf7f2`. Check that the text still contrasts with it. The dark theme has its own background setting.
+
+### Theme configuration file
+
+Open `tailwind.config.ts` beside `package.json` in your Customer Web folder.
+
+<details className="my-4 rounded-lg border border-border p-4">
+  <summary className="cursor-pointer font-medium">View tailwind.config.ts</summary>
 
 ```ts
-import { heroui } from '@heroui/theme';
+import { heroui } from "@heroui/theme";
 
 /** @type {import('tailwindcss').Config} */
-const config = {
+const config: import("tailwindcss").Config = {
   content: [
-    './src/layouts/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
+    "./src/layouts/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
+      fontWeight: {
+        thin: "50", // was 100
+        extralight: "150", // was 200
+        light: "250", // was 300
+        normal: "350", // was 400
+        medium: "450", // was 500
+        semibold: "550", // was 600
+        bold: "600", // was 700
+        extrabold: "750", // was 800
+        black: "850", // was 900
+      },
       fontFamily: {
-        sans: ['var(--font-sans)'],
-        mono: ['var(--font-mono)'],
+        sans: ["var(--font-storefront, var(--font-sans))"],
+        mono: ["var(--font-storefront, var(--font-mono))"],
       },
       fontSize: {
-        tiny: '0.4375rem', // 7px
-        xxs: '0.625rem', // 10px
-        xs: '0.75rem', // 12px
-        small: '0.875rem', // 14px
-        medium: '0.9375rem', // 15px
-        large: '1.125rem', // 18px
+        tiny: "0.4375rem", // 7px
+        xxs: "0.625rem", // 10px
+        xs: "0.75rem", // 12px
+        small: "0.875rem", // 14px
+        medium: "0.9375rem", // 15px
+        large: "1.125rem", // 18px
+      },
+      width: {
+        // Full-bleed sections use the page container's content width, which
+        // excludes classic scrollbars unlike 100vw.
+        page: "100cqw",
       },
       screens: {
-        xxs: '320px',
-        xs: '375px',
-        sm: '431px',
-        md: '769px',
-        lg: '1440px',
-        xl: '1800px',
-        xxl: '2550px',
+        xxs: "320px",
+        xs: "375px",
+        sm: "431px",
+        md: "769px",
+        lg: "1440px",
+        xl: "1800px",
+        xxl: "2550px",
       },
     },
   },
-  darkMode: 'class',
+  darkMode: "class",
   plugins: [
     heroui({
-      prefix: 'heroui',
+      prefix: "heroui",
       addCommonColors: false,
-      defaultTheme: 'light',
-      defaultExtendTheme: 'light',
+      defaultTheme: "light",
+      defaultExtendTheme: "light",
       layout: {
-        dividerWeight: '1px',
+        dividerWeight: "1px",
         disabledOpacity: 0.45,
         radius: {
-          small: '6px',
-          medium: '8px',
-          large: '12px',
+          small: "6px",
+          medium: "8px",
+          large: "12px",
         },
         borderWidth: {
-          small: '1px',
-          medium: '1px',
-          large: '2px',
+          small: "1px",
+          medium: "1px",
+          large: "2px",
         },
       },
       themes: {
         light: {
           colors: {
-            background: '#ffffff', // white
-            foreground: '#000000', // black
-            focus: '#3b82f6', // bright blue (Tailwind blue-500)
+            background: "#ffffff",
+            foreground: "#000000",
+            focus: "#3b82f6", // Blue focus
             primary: {
-              50: '#eff6ff', // lightest blue
-              100: '#dbeafe', // very light blue
-              200: '#bfdbfe', // light sky blue
-              300: '#93c5fd', // soft blue
-              400: '#60a5fa', // medium blue
-              500: '#3b82f6', // main blue
-              600: '#2563eb', // deep blue
-              700: '#1d4ed8', // darker blue
-              800: '#1e40af', // navy blue
-              900: '#1e3a8a', // dark navy
-              DEFAULT: '#3b82f6', // default blue
+              50: "#eff6ff",
+              100: "#dbeafe",
+              200: "#bfdbfe",
+              300: "#93c5fd",
+              400: "#60a5fa",
+              500: "#3b82f6",
+              600: "#2563eb",
+              700: "#1d4ed8",
+              800: "#1e40af",
+              900: "#1e3a8a",
+              DEFAULT: "#3b82f6",
             },
           },
         },
         dark: {
           colors: {
-            background: '#000000', // black
-            foreground: '#ffffff', // white
-            focus: '#60a5fa', // sky blue focus ring
+            background: "#000000",
+            foreground: "#FFFFFF",
+            focus: "#60a5fa", // Brighter blue for dark mode
             primary: {
-              50: '#eff6ff', // lightest blue
-              100: '#dbeafe', // very light blue
-              200: '#bfdbfe', // light sky blue
-              300: '#93c5fd', // soft blue
-              400: '#60a5fa', // medium blue
-              500: '#3b82f6', // main blue
-              600: '#2563eb', // deep blue
-              700: '#1d4ed8', // darker blue
-              800: '#1e40af', // navy blue
-              900: '#1e3a8a', // dark navy
-              DEFAULT: '#3b82f6', // default blue
+              50: "#eff6ff",
+              100: "#dbeafe",
+              200: "#bfdbfe",
+              300: "#93c5fd",
+              400: "#60a5fa",
+              500: "#3b82f6",
+              600: "#2563eb",
+              700: "#1d4ed8",
+              800: "#1e40af",
+              900: "#1e3a8a",
+              DEFAULT: "#3b82f6",
             },
           },
         },
@@ -131,4 +164,8 @@ const config = {
 export default config;
 ```
 
-- You can download the color scheme from [Here](https://www.heroui.com/themes).
+</details>
+
+## Review and publish
+
+Check the home page, buttons, and text in light and dark modes, and on a narrow screen. Changes made in source files need a [new build and deployment](/customer-web/deployment).

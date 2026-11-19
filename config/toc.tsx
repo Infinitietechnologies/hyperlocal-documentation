@@ -294,48 +294,18 @@ export const TocData: TocData = {
     },
   ],
   // Customer Web section (customer-web)
-  'customer-web/introduction': [
-    {
-      title: 'Overview',
-      href: '/customer-web/introduction#customer-web-—-introduction',
-    },
-    {
-      title: 'What you will learn',
-      href: '/customer-web/introduction#what-you-will-learn',
-    },
-  ],
   'customer-web/installation': [
     {
-      title: "What's needed",
-      href: '/customer-web/installation#1-what-youll-need',
+      title: 'Get the tools and source files',
+      href: '/customer-web/installation#get-the-tools-and-source-files',
     },
     {
-      title: 'Install Node.js',
-      href: '/customer-web/installation#2-install-nodejs-the-runtime',
+      title: 'Configure your site',
+      href: '/customer-web/installation#configure-your-site',
     },
     {
-      title: 'Install VS Code',
-      href: '/customer-web/installation#3-install-visual-studio-code-vs-code',
-    },
-    {
-      title: 'Get the project files',
-      href: '/customer-web/installation#4-get-the-project-files',
-    },
-    {
-      title: 'Install dependencies',
-      href: '/customer-web/installation#5-install-dependencies',
-    },
-    {
-      title: 'Open .env file & config',
-      href: '/customer-web/installation#6-open-env-file',
-    },
-    {
-      title: 'Start the dev server',
-      href: '/customer-web/installation#7-start-the-development-server',
-    },
-    {
-      title: 'Troubleshooting',
-      href: '/customer-web/installation#8-troubleshooting',
+      title: 'Open the storefront',
+      href: '/customer-web/installation#open-the-storefront',
     },
   ],
   'customer-web/plugins': [
@@ -362,40 +332,26 @@ export const TocData: TocData = {
   ],
   'customer-web/deployment': [
     {
-      title: 'Overview',
-      href: '/customer-web/deployment#deploying-customer-web-nextjs',
-    },
-    {
-      title: 'Choosing Your Deployment Method',
-      href: '/customer-web/deployment#choosing-your-deployment-method',
-    },
-    {
       title: 'Static Export',
       href: '/customer-web/deployment#static-export',
+      pages: [
+        {
+          title: 'Automatic upload with FTP',
+          href: '/customer-web/deployment#automatic-upload-with-ftp',
+        },
+        {
+          title: 'Manual upload',
+          href: '/customer-web/deployment#manual-upload',
+        },
+      ],
     },
     {
-      title: 'Server-Side Rendering (SSR)',
-      href: '/customer-web/deployment#server-side-rendering-ssr',
+      title: 'Server deployment (SSR)',
+      href: '/customer-web/deployment#server-deployment-ssr',
     },
     {
-      title: 'Environment Variables',
-      href: '/customer-web/deployment#environment-variables',
-    },
-    {
-      title: 'Deployment Checklist',
-      href: '/customer-web/deployment#deployment-checklist',
-    },
-    {
-      title: 'Troubleshooting: Static Export Issues',
-      href: '/customer-web/deployment#static-export-issues',
-    },
-    {
-      title: 'Troubleshooting: SSR Deployment Issues',
-      href: '/customer-web/deployment#ssr-deployment-issues',
-    },
-    {
-      title: 'Additional Resources',
-      href: '/customer-web/deployment#additional-resources',
+      title: 'After publishing',
+      href: '/customer-web/deployment#after-publishing',
     },
   ],
   'customer-web/prerequisites': [
@@ -412,27 +368,32 @@ export const TocData: TocData = {
       href: '/customer-web/prerequisites#configuring-push-notifications',
     },
     {
+      title: 'Map setup',
+      href: '/customer-web/prerequisites#3-map-setup',
+    },
+    {
       title: 'Final checklist',
-      href: '/customer-web/prerequisites#3-final-checklist',
+      href: '/customer-web/prerequisites#4-final-checklist',
     },
   ],
   'customer-web/theme': [
     {
-      title: 'Overview',
-      href: '/customer-web/theme#overview',
+      title: 'Change branding in the Admin Panel',
+      href: '/customer-web/theme#change-branding-in-the-admin-panel',
     },
     {
-      title: 'Understanding Foreground and Background',
-      href: '/customer-web/theme#understanding-foreground-and-background',
+      title: 'Change defaults in your web project',
+      href: '/customer-web/theme#change-defaults-in-your-web-project',
+      pages: [
+        {
+          title: 'Theme configuration file',
+          href: '/customer-web/theme#theme-configuration-file',
+        },
+      ],
     },
     {
-      title: 'Primary and Secondary colors',
-      href: '/customer-web/theme#primary-and-secondary-colors',
-    },
-
-    {
-      title: 'Where to modify',
-      href: '/customer-web/theme#where-to-modify-themes',
+      title: 'Review and publish',
+      href: '/customer-web/theme#review-and-publish',
     },
   ],
 };

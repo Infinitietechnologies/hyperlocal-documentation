@@ -1,307 +1,112 @@
----
+﻿---
 title: Customer Web Deployment
-description: Guide for deploying the Next.js Customer Web application using either Static Export or Server-Side Rendering (SSR)
-date: 2025-11-04
+description: Publish Customer Web with static FTP upload or a Node.js server.
+date: 2026-11-19
 ---
 
-# Deploying Customer Web (Next.js)
-
-This guide explains how to deploy your Next.js Customer Web application using either Static Export or Server-Side Rendering (SSR). Choose the deployment method based on your hosting environment and requirements.
-
-## Choosing Your Deployment Method
-
-<Note type="info">
-  If you're deploying to shared hosting or a host that only serves static files,
-  prefer the Static Export (static build). If you have a server or VPS with
-  Node.js available and need dynamic pages or real-time features, choose
-  Server-Side Rendering (SSR).
-</Note>
-
-<Tabs defaultValue="static" className="w-full">
-  <TabsList className="grid w-full grid-cols-2">
-    <TabsTrigger value="static">Static Export</TabsTrigger>
-    <TabsTrigger value="ssr">Server-Side Rendering (SSR)</TabsTrigger>
-  </TabsList>
-  <TabsContent value="static">
-    ### Static Export Deployment
-    
-    Best for:
-    - Shared hosting environments
-    - Static file hosting (Netlify, Vercel, GitHub Pages)
-    - When Node.js server is not available
-    - Simple deployments without dynamic requirements
-
-    #### 1. Configure Static Export
-
-    1. Open your `.env` file in the project root and set:
-    ```env
-    NEXT_PUBLIC_SSR=false
-    ```
-
-    2. Run locally website first and verify:
-    ```cmd
-    npm run dev
-    ```
-
-    #### 2. Build the Project
-
-    ```bash
-    npm run build
-    ```
-
-    This will create an `out` directory containing static files.
-
-    #### 3. Deploy the Files
-
-    Upload the entire contents of the `out` folder to your web server's public directory (e.g., public_html, www, etc.)
-
-    ##### For cPanel Hosting:
-    1. Access your cPanel
-    2. Open File Manager
-    3. Navigate to public_html
-    4. Upload the contents of the `out` folder
-    5. Ensure proper file permissions (typically 644 for files, 755 for directories)
-
-    ##### For FTP Upload:
-    1. Connect to your server using FTP client
-    2. Navigate to your web root directory
-    3. Upload all files from the `out` folder
-    4. Maintain the folder structure exactly as is
-
-    #### 4. Configure Web Server
-
-    ##### Apache (.htaccess file):
-    ```apache
-    <IfModule mod_rewrite.c>
-        RewriteEngine On
-        RewriteBase /
-        RewriteRule ^index\.html$ - [L]
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule . /index.html [L]
-    </IfModule>
-    ```
-
-    ##### Nginx (nginx.conf):
-    ```nginx
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-    ```
-
-    #### 5. Optional: FTP Auto-deploy
-
-    If you'd like to automatically upload the generated static files to your server via FTP, the project includes an `ftp.js` file that accepts a configuration object like:
-
-    ```javascript
-    const config = {
-      host: "your.ftp.server.com",
-      user: "ftp-username",
-      password: "ftp-password",
-      port: 21,
-      localRoot: __dirname + "/build",
-      remoteRoot: "/",
-      include: ["*", ".htaccess"],
-      exclude: ["images/**"],
-      deleteRemote: false,
-    };
-    ```
-
-    Fill the values with your server credentials and settings. Then run:
-
-    ```cmd
-    npm run deploy
-    ```
-
-    This will upload the `out` folder to your server (if `localRoot` is set correctly and the FTP credentials are valid). Make sure `NEXT_PUBLIC_SSR=false` in your `.env` so the site is built as static output, and verify `localRoot` points to the folder containing the built static files.
-
-    If the FTP credentials are incorrect the deploy will fail — check the terminal output for the error details.
-
-  </TabsContent>
-
-  <TabsContent value="ssr">
-    ### Server-Side Rendering Deployment
-
-    Best for:
-    - VPS or dedicated servers
-    - Environments with Node.js support
-    - Applications requiring dynamic content
-    - Real-time data requirements
-
-    #### 1. Configure SSR
-
-    1. Open your `.env` file in the project root and set:
-    ```env
-    NEXT_PUBLIC_SSR=true
-    ```
-
-    #### 2. Server Prerequisites
-
-    Install Node.js and PM2 on your server:
-
-    ```bash
-    # Update package list
-    sudo apt update
-
-    # Install Node.js
-    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-    sudo apt install -y nodejs
-
-    # Verify installation
-    node -v
-    npm -v
-
-    # Install PM2 globally
-    sudo npm install -g pm2
-    ```
-
-    #### 3. Deploy Application
-
-    1. Transfer your project files to the server:
-    ```bash
-    # Example using scp
-    scp -r ./your-project-folder user@your-server:/path/to/destination
-    ```
-
-    2. Install dependencies and build:
-    ```bash
-    cd /path/to/your/project
-    npm install
-    npm run build
-    ```
-
-    #### 4. Configure PM2
-
-    Create a PM2 configuration file `ecosystem.config.js`:
-
-    ```javascript
-    module.exports = {
-      apps: [
-        {
-          name: 'customer-web',
-          script: 'node_modules/next/dist/bin/next',
-          args: 'start',
-          instances: 'max', // or a number like 4
-          exec_mode: 'cluster',
-          autorestart: true,
-          watch: false,
-          max_memory_restart: '1G',
-          env: {
-            NODE_ENV: 'production',
-            PORT: 3000
-          }
-        }
-      ]
-    }
-    ```
-
-    Start the application with PM2:
-    ```bash
-    pm2 start ecosystem.config.js
-    ```
-
-    Setup PM2 startup script:
-    ```bash
-    pm2 startup
-    pm2 save
-    ```
-
-    #### 5. Configure Nginx as Reverse Proxy
-
-    Create an Nginx configuration file:
-
-    ```nginx
-    server {
-        listen 80;
-        server_name your-domain.com;
-
-        location / {
-            proxy_pass http://localhost:3000;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_cache_bypass $http_upgrade;
-        }
-    }
-    ```
-
-    Enable the configuration and restart Nginx:
-    ```bash
-    sudo ln -s /etc/nginx/sites-available/your-site /etc/nginx/sites-enabled/
-    sudo nginx -t
-    sudo systemctl restart nginx
-    ```
-
-    #### 6. SSL Configuration (Optional but Recommended)
-
-    Install Certbot and obtain SSL certificate:
-    ```bash
-    sudo apt install certbot python3-certbot-nginx
-    sudo certbot --nginx -d your-domain.com
-    ```
-
-    #### 7. Monitoring and Maintenance
-
-    Monitor your application:
-    ```bash
-    pm2 status
-    pm2 logs
-    pm2 monit
-    ```
-
-    Update your application:
-    ```bash
-    git pull  # Get latest changes
-    npm install
-    npm run build
-    pm2 reload all
-    ```
-
-  </TabsContent>
-</Tabs>
-
-## Environment Variables
-
-Regardless of the deployment method, ensure your environment variables are properly set:
-
-```env
-NEXT_PUBLIC_SSR=true/false  # Depends on deployment method
-
-NEXT_PUBLIC_ADMIN_PANEL_URL=https://your-admin-panel-url.com
-```
-
-## Deployment Checklist
-
-Before deploying, verify:
-
-- [ ] All environment variables are correctly set
-- [ ] Build process completes successfully
-- [ ] Admin Panel URL is correctly configured
-- [ ] All API endpoints are properly configured
-- [ ] Assets and images are loading correctly
-- [ ] SSL certificate is installed (if required)
-- [ ] DNS settings are configured properly
-
-## Troubleshooting
-
-### Static Export Issues
-
-- If pages are not found, check your .htaccess or nginx configuration
-- Verify all static assets are properly uploaded
-- Check file permissions on your hosting server
-
-### SSR Deployment Issues
-
-- Check PM2 logs: `pm2 logs`
-- Verify Node.js version compatibility
-- Check Nginx error logs: `sudo tail -f /var/log/nginx/error.log`
-- Ensure ports are not blocked by firewall
-- Verify process has sufficient permissions
-
-## Additional Resources
-
-- [Next.js Deployment Documentation](https://nextjs.org/docs/deployment)
-- [PM2 Documentation](https://pm2.keymetrics.io/docs/usage/quick-start/)
-- [Nginx Documentation](https://nginx.org/en/docs/)
-- [Node.js Best Practices](https://nodejs.org/en/docs/guides/nodejs-docker-webapp/)
+# Deploying Customer Web
+
+- **Shared hosting or cPanel:** Use [static export](#static-export).
+- **Linux VPS or aaPanel with Node.js:** Use [server deployment (SSR)](#server-deployment-ssr).
+- **Both methods:** The build must be able to reach your Admin Panel.
+
+## Static export
+
+1. Create `.env.local` next to `package.json` in your Customer Web folder.
+2. Add these settings and replace the example addresses.
+
+   ```env
+   NEXT_PUBLIC_SSR=false
+   NEXT_PUBLIC_ADMIN_PANEL_URL=https://admin.example.com
+   NEXT_PUBLIC_SITE_URL=https://shop.example.com
+   ```
+
+   - **Admin Panel URL:** Use its base address, without `/api`.
+   - **Site URL:** Use your public storefront address. It goes into the sitemap and search metadata.
+   - Rebuild whenever you change either address.
+
+### Automatic upload with FTP
+
+1. Add your hosting provider's FTP details to the same `.env.local` file.
+
+   ```env
+   FTP_HOST=ftp.example.com
+   FTP_USER=your-ftp-user
+   FTP_PASSWORD="replace-with-your-ftp-password"
+   ```
+
+2. Check the FTP settings.
+
+   - **Destination:** Use an FTP account whose root (`/`) is your website folder, such as `public_html`.
+   - **Port:** Add `FTP_PORT` if your host uses a port other than 21.
+   - **Explicit FTPS:** Add `FTP_SECURE=true` if your host requires it.
+   - **Credentials:** Keep `.env.local` on the upload computer and out of Git. The script uses it to sign in.
+
+3. Check upload access. This command uploads, reads, and removes a small test file.
+
+   ```bash
+   npm run test:ftp
+   ```
+
+4. Confirm that `NEXT_PUBLIC_SSR=false` in `.env.local`. Clear any conflicting `NEXT_PUBLIC_SSR=true` in your terminal or `.env.production.local`.
+
+   > **Use FTP deploy for static export only.** In SSR mode the uploader sends project files, including environment files. Follow the server deployment steps for SSR.
+
+5. Publish. This installs dependencies, builds the site, and uploads only the contents of `out/` in static mode.
+
+   ```bash
+   npm run deploy
+   ```
+
+### Manual upload
+
+1. Run `npm run build`.
+2. Upload the **contents** of `out/` to your website folder. Use your host's file manager or FTP client and keep the folder structure.
+3. Set up the URL rules for your host.
+   - **Apache or cPanel:** Include the generated `.htaccess` from `out/`.
+   - **Nginx:** Ask your host to set up equivalent URL rules.
+
+**For either upload method:** FTP replaces matching files and leaves old ones on the server. Remove stale files for any plugin or page you removed.
+
+## Server deployment (SSR)
+
+- **Server tools:** Linux, Git, Node.js 22, PM2, Bash, `tar`, and `flock`.
+- **Server account:** Use the same account that owns the Customer Web checkout and runs PM2.
+
+1. In the **server's** Customer Web folder, create the settings file.
+
+   ```bash
+   cp .env.ssr.example .env.production.local
+   ```
+
+2. Set your Admin Panel URL and public site URL in `.env.production.local`. Keep `NEXT_PUBLIC_SSR=true`.
+3. Commit the release to your deployment branch. The server builds from Git. Changes and plugins that exist only on your computer won't be included.
+4. Deploy on the server.
+
+   ```bash
+   npm run deploy:ssr
+   ```
+
+   - The script fetches `main` by default. Set `DEPLOY_BRANCH` to use another branch.
+   - PM2 switches to the new release after the build succeeds.
+
+5. Connect and verify your domain.
+   - In aaPanel or Nginx, set the reverse proxy to `http://127.0.0.1:3003`.
+   - Enable HTTPS.
+   - Run `pm2 status` and check that `hyperlocal-web` is running.
+
+**Managed Node.js host**
+
+- Add the two URLs and `NEXT_PUBLIC_SSR=true` in your hosting dashboard.
+- If the host asks for commands, use `npm run build:ssr` to build and `npm start` to start.
+
+## After publishing
+
+- Open the live site over HTTPS. Check the home page, a product page, sign-in, and cart.
+- Check that `/robots.txt` and `/sitemap.xml` reference your public domain.
+
+**If something fails**
+
+- **Build:** Check both URLs and confirm the build machine can reach the Admin Panel.
+- **FTP:** Run `npm run test:ftp` and share the reported step with your host.
+- **SSR:** Check `pm2 logs hyperlocal-web --lines 50`.
