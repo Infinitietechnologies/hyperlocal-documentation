@@ -45,4 +45,12 @@ Ready to go live? Click the button below and deploy your app in just a few click
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/sanjayc208/pinexio)
 
+### Production deploys from approved pull requests
+
+The `PR build and production deploy` GitHub Actions workflow builds pull requests targeting `master` and deploys to Vercel only when one is merged. To enable it:
+
+1. Add `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` as GitHub repository Actions secrets. Find the IDs in Vercel under **Project Settings → General** (or in the linked project's `.vercel/project.json`); create a token in your Vercel account settings.
+2. In GitHub, protect `master`: require pull requests and at least one approval, and require the workflow's `verify` check to pass.
+3. Disable Vercel's automatic Git deployments for this project so they cannot deploy changes independently of this workflow.
+
 _Pinexio is open-source and free to use. Happy documenting!_ 🚀
